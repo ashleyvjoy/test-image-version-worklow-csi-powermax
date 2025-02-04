@@ -6,11 +6,15 @@
 #
 #  http://www.apache.org/licenses/LICENSE-2.0
 
-# Reusable workflow to perform the go version update on Golang based projects
+# Reusable workflow to perform image version update on Golang based projects
 name: Image Version Update
 
 on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (major, minor, patch) Ex: minor"
+        required: true
   repository_dispatch:
     types: [image-update-workflow]
 
@@ -19,6 +23,5 @@ jobs:
   image-version-update:
     uses: ashleyvjoy/test-image-update-common-github-actions/.github/workflows/image-version-workflow.yaml@image-version-update-workflow
     with:
-      version: "minor"
+      version: "${{ github.event.inputs.version || 'minor' }}"
     secrets: inherit
-
